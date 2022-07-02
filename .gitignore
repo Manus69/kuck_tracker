@@ -1,0 +1,17 @@
+.dub
+.vscode
+docs.json
+__dummy.html
+docs/
+/kuck_tracker
+kuck_tracker.so
+kuck_tracker.dylib
+kuck_tracker.dll
+kuck_tracker.a
+kuck_tracker.lib
+kuck_tracker-test-*
+*.exe
+*.o
+*.obj
+*.lst
+*.txt
