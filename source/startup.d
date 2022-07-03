@@ -11,6 +11,7 @@ Config GetConfig(string[] cmd_args)
 
     config = new Config();
     getopt(cmd_args, INTERVAL_STR, &config.time_interval, FILE_STR, &config.input_file_name);
+    config.ComputeNDataPoints();
 
     return config;
 }

@@ -22,15 +22,6 @@ struct Asset
         this.target = to!double(substrings[1]);
     }
 
-    bool CheckPriceDiff(double price0, double price1) const pure
-    {
-        double diff;
-
-        diff = ((price1 - price0) * 100) / price0;
-
-        return target >= 0 ? diff >= target : diff <= target;
-    }
-
     string toString() const
     {
         return raw_string;

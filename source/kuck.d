@@ -9,25 +9,17 @@ enum DATA = "data";
 
 class KuckApi : Api
 {
-    JSONValue   json;
-    string      response;
-
     string SendRequest()
     {
-        response = get(REQUEST).idup;
-
-        return response;
+        return get(REQUEST).idup;
     }
 
     JSONValue GetJSON()
     {
-        SendRequest();
-        json = parseJSON(response);
-
-        return json;
+        return parseJSON(SendRequest());
     }
 
-    double GetPrice(in string symbol)
+    double ExtractPrice(in JSONValue json, in string symbol)
     {
         string str_value;
 

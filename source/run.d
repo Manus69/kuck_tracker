@@ -4,63 +4,46 @@ import source.defaults;
 import source.asset;
 import source.config;
 import source.kuck;
-import source.storage;
 import source.response;
-import source.api;
 import source.output;
+import source.manager;
 
-void GetData(Api api, Storage!double storage, in Asset[] assets)
+bool CheckPriceDiff(in Asset asset, double diff) pure
 {
-    double price;
-
-    api.GetJSON();
-
-    foreach (ref asset; parallel(assets))
-    {
-        price = api.GetPrice(asset.symbol);
-        storage.Store(asset.symbol, price);
-    }
+    return asset.target >= 0 ? diff >= asset.target : diff <= asset.target;
 }
 
-Asset[] CheckData(in Storage!double storage, in Asset[] assets)
+void GetData(Manager manager, in Asset[] assets)
+{
+    manager.GetData(assets);
+}
+
+Asset[] CheckData(in Manager manager, in Asset[] assets)
 {
     Asset[] result;
-    double  price0;
-    double  price1;
+    double  diff;
 
     foreach (ref asset; assets)
     {
-        if (!storage.FullCapacity(asset.symbol))
-            continue ;
-        
-        price0 = storage.GetFirst(asset.symbol);
-        price1 = storage.GetLast(asset.symbol);
-
-        if (asset.CheckPriceDiff(price0, price1))
+        diff = manager.GetDiff(asset);
+        if (CheckPriceDiff(asset, diff))
             result ~= asset;
     }
 
     return result;
 }
 
-private ulong _compute_n(in Config config) pure
-{
-    return config.time_interval / config.request_interval;
-}
-
 void Run(in Config config, in Asset[] assets)
 {
-    Storage!double  storage;
-    Asset[]         results;
-    Api             api;
+    Asset[] results;
+    Manager manager;
 
-    api = new KuckApi();
-    storage = Storage!double(_compute_n(config));
+    manager = Manager(config);
 
     while (true)
     {
-        GetData(api, storage, assets);
-        results = CheckData(storage, assets);
+        GetData(manager, assets);
+        results = CheckData(manager, assets);
 
         if (results.length > 0)
         {

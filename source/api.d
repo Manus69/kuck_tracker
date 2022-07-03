@@ -6,5 +6,5 @@ interface Api
 {
     string      SendRequest();
     JSONValue   GetJSON();
-    double      GetPrice(in string symbol);
+    double      ExtractPrice(in JSONValue json, in string symbol);
 }
