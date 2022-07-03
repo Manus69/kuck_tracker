@@ -22,7 +22,6 @@ void main(string[] args)
     // assets = LoadAssets(config);
     // Run(config, assets);
 
-    string str = "penis";
-    Apply(&TransformIntoDick, str);
-    writeln(str);
+    int n = GetInt(&GetString, &CountChars);
+    writeln(n);
 }
