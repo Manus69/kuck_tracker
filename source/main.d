@@ -22,6 +22,6 @@ void main(string[] args)
     // assets = LoadAssets(config);
     // Run(config, assets);
 
-    int n = GetInt(&GetString, &CountChars);
-    writeln(n);
+    writeln(CountJews());
+
 }

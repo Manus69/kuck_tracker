@@ -1,5 +1,7 @@
 module source.test;
 
+import source.defaults;
+
 void TransformIntoDick(ref string str)
 {
     str = "Dick";
@@ -23,5 +25,10 @@ int CountChars(in string str) pure
 int GetInt(string function() pure f, int function(string) pure g) pure
 {
     return g(f());
+}
+
+int CountJews() pure
+{
+    return GetInt(&GetString, &CountChars);
 }
 
