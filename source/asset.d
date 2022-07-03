@@ -22,6 +22,11 @@ struct Asset
         this.target = to!double(substrings[1]);
     }
 
+    bool opEquals(in Asset rhs) const pure
+    {
+        return this.symbol == rhs.symbol;
+    }
+
     string toString() const
     {
         return raw_string;

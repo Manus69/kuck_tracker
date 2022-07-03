@@ -45,4 +45,9 @@ struct Queue(T)
     {
         return values[$ - 1];
     }
+
+    string toString() const
+    {
+        return format("%s", values);
+    }
 }

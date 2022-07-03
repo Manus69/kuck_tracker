@@ -7,6 +7,7 @@ import source.kuck;
 import source.response;
 import source.output;
 import source.manager;
+import source.startup;
 
 bool CheckPriceDiff(in Asset asset, double diff) pure
 {
@@ -25,7 +26,11 @@ Asset[] CheckData(in Manager manager, in Asset[] assets)
 
     foreach (ref asset; assets)
     {
-        diff = manager.GetDiff(asset);
+        if (manager.AtCapacity(asset.symbol))
+            diff = manager.GetDiff(asset.symbol);
+        
+        // writeln(diff);
+
         if (CheckPriceDiff(asset, diff))
             result ~= asset;
     }
@@ -33,23 +38,28 @@ Asset[] CheckData(in Manager manager, in Asset[] assets)
     return result;
 }
 
-void Run(in Config config, in Asset[] assets)
+void Run(Config config, Asset[] assets)
 {
     Asset[] results;
     Manager manager;
 
     manager = Manager(config);
-
     while (true)
     {
         GetData(manager, assets);
         results = CheckData(manager, assets);
+
+        writeln(manager);
 
         if (results.length > 0)
         {
             Output(results);
         }
 
-        Thread.sleep(config.request_interval.minutes);
+        // Thread.sleep(config.request_interval.minutes);
+        Thread.sleep(5.seconds);
+
+        if (config.InputModified())
+            assets = LoadAssets(config);
     }
 }

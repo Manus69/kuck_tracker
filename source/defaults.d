@@ -1,5 +1,6 @@
 module source.defaults;
 
+public import std.file;
 public import std.conv;
 public import std.stdio;
 public import std.string;
@@ -12,6 +13,7 @@ public import std.net.curl;
 public import std.json;
 public import std.getopt;
 public import std.parallelism;
+public import std.datetime;
 public import core.thread;
 
 enum COMMENT = "//";

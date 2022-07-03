@@ -1,8 +1,9 @@
 module source.storage;
 
 import source.queue;
+import source.defaults;
 
-struct Storage(T)
+class Storage(T)
 {
     private ulong           capacity;
     private Queue!T[string] table;
@@ -27,7 +28,7 @@ struct Storage(T)
         table[symbol].Push(value);
     }
 
-    T GetFirst(in string symbol) pure const
+    T GetFirst(in string symbol) const pure
     {
         return table[symbol].Front();
     }
@@ -35,5 +36,10 @@ struct Storage(T)
     T GetLast(in string symbol) pure const
     {
         return table[symbol].Back();
+    }
+
+    override string toString() const
+    {
+        return format("%s", table);
     }
 }

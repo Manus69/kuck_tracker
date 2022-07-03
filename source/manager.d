@@ -15,7 +15,8 @@ struct Manager
 
     this(in Config config)
     {
-        this.storage = Storage!double(config.number_of_data_points);
+        // this.storage = new Storage!double(config.number_of_data_points);
+        this.storage = new Storage!double(2);
         this.api = new KuckApi();
     }
 
@@ -29,26 +30,38 @@ struct Manager
 
     void GetData(in Asset[] assets)
     {
-        double price;
+        double  price;
+        Asset[] unique_assets;
 
         _get_json();
 
+        unique_assets = cast(Asset[])uniq(assets).array;
         // foreach (ref asset; parallel(assets))
-        foreach (ref asset; assets)
+        foreach (ref asset; unique_assets)
         {
             price = api.ExtractPrice(json, asset.symbol);
             storage.Store(asset.symbol, price);
         }
     }
 
-    double GetDiff(in Asset asset) const pure
+    double GetDiff(in string symbol) const pure
     {
         double p0;
         double p1;
 
-        p0 = storage.GetFirst(asset.symbol);
-        p1 = storage.GetLast(asset.symbol);
+        p0 = storage.GetFirst(symbol);
+        p1 = storage.GetLast(symbol);
 
         return ((p1 - p0) * 100) / p0;
+    }
+
+    bool AtCapacity(in string symbol) const pure
+    {
+        return storage.FullCapacity(symbol);
+    }
+
+    string toString() const
+    {
+        return storage.toString();
     }
 }
