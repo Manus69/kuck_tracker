@@ -30,6 +30,11 @@ struct Asset
 
         return target >= 0 ? diff >= target : diff <= target;
     }
+
+    string toString() const
+    {
+        return raw_string;
+    }
 }
 
 Asset[] GetAssets(in string[] lines)

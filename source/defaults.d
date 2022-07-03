@@ -11,6 +11,8 @@ public import std.format;
 public import std.net.curl;
 public import std.json;
 public import std.getopt;
+public import std.parallelism;
+public import core.thread;
 
 enum COMMENT = "//";
 enum DEFAULT_FILE = "input.txt";

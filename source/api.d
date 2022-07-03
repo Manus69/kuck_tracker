@@ -1,6 +1,10 @@
 module source.api;
 
+import source.defaults;
+
 interface Api
 {
-    static string SendRequest();
+    string      SendRequest();
+    JSONValue   GetJSON();
+    double      GetPrice(in string symbol);
 }

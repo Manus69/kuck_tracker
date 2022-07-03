@@ -6,19 +6,18 @@ import source.config;
 import source.kuck;
 import source.storage;
 import source.response;
+import source.api;
+import source.output;
 
-void GetData(Storage!double storage, in Asset[] assets)
+void GetData(Api api, Storage!double storage, in Asset[] assets)
 {
-    JSONValue   json;
-    string      response;
-    double      price;
+    double price;
 
-    response = KuckApi.SendRequest();
-    json = StringToJson(response);
+    api.GetJSON();
 
-    foreach (ref asset; assets)
+    foreach (ref asset; parallel(assets))
     {
-        price = GetKuckPrice(json, asset.symbol);
+        price = api.GetPrice(asset.symbol);
         storage.Store(asset.symbol, price);
     }
 }
@@ -53,16 +52,21 @@ void Run(in Config config, in Asset[] assets)
 {
     Storage!double  storage;
     Asset[]         results;
+    Api             api;
 
+    api = new KuckApi();
     storage = Storage!double(_compute_n(config));
+
     while (true)
     {
-        GetData(storage, assets);
+        GetData(api, storage, assets);
         results = CheckData(storage, assets);
 
         if (results.length > 0)
         {
-            
+            Output(results);
         }
+
+        Thread.sleep(config.request_interval.minutes);
     }
 }
