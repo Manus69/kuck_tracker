@@ -11,13 +11,18 @@ import source.storage;
 import source.config;
 import source.run;
 import source.startup;
+import source.test;
 
 void main(string[] args)
 {
-    Config     config;
-    Asset[]    assets;
+    // Config     config;
+    // Asset[]    assets;
 
-    config = GetConfig(args);
-    assets = LoadAssets(config);
-    Run(config, assets);
+    // config = GetConfig(args);
+    // assets = LoadAssets(config);
+    // Run(config, assets);
+
+    string str = "penis";
+    Apply(&TransformIntoDick, str);
+    writeln(str);
 }
