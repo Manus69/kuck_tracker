@@ -7,10 +7,14 @@ import source.input;
 
 Config GetConfig(string[] cmd_args)
 {
-    Config config;
+    Config  config;
+    ulong   r_interval;
+    ulong   t_interval;
 
     config = new Config();
-    getopt(cmd_args, INTERVAL_STR, &config.time_interval, FILE_STR, &config.input_file_name);
+    getopt(cmd_args, R_INTERVAL_STR, &r_interval, 
+            T_INTERVAL_STR, &t_interval, FILE_STR, &config.input_file_name);
+    config.SetIntervals(r_interval, t_interval);
     config.ComputeNDataPoints();
 
     return config;

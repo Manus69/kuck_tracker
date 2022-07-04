@@ -14,9 +14,20 @@ bool CheckPriceDiff(in Asset asset, double diff) pure
     return asset.target >= 0 ? diff >= asset.target : diff <= asset.target;
 }
 
-void GetData(Manager manager, in Asset[] assets)
+bool GetData(Manager manager, in Asset[] assets)
 {
-    manager.GetData(assets);
+    try
+    {
+        manager.GetData(assets);
+
+        return true;
+    }
+    catch (Exception e)
+    {
+        KuckError(e.msg, DATA_ERROR);
+
+        return false;
+    }
 }
 
 Asset[] CheckData(in Manager manager, in Asset[] assets)
@@ -24,15 +35,15 @@ Asset[] CheckData(in Manager manager, in Asset[] assets)
     Asset[] result;
     double  diff;
 
-    foreach (ref asset; assets)
+    foreach (ref asset; parallel(assets))
     {
         if (manager.AtCapacity(asset.symbol))
             diff = manager.GetDiff(asset.symbol);
         
-        // writeln(diff);
-
         if (CheckPriceDiff(asset, diff))
+        {
             result ~= asset;
+        }
     }
 
     return result;
@@ -44,20 +55,19 @@ void Run(Config config, Asset[] assets)
     Manager manager;
 
     manager = Manager(config);
+
     while (true)
     {
-        GetData(manager, assets);
-        results = CheckData(manager, assets);
-
-        writeln(manager);
+        if (GetData(manager, assets))
+            results = CheckData(manager, assets);
 
         if (results.length > 0)
         {
+            // PlaySound(config.sound_file_name);
             Output(results);
         }
 
-        // Thread.sleep(config.request_interval.minutes);
-        Thread.sleep(5.seconds);
+        Thread.sleep(config.request_interval.seconds);
 
         if (config.InputModified())
             assets = LoadAssets(config);

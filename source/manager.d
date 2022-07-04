@@ -15,8 +15,8 @@ struct Manager
 
     this(in Config config)
     {
-        // this.storage = new Storage!double(config.number_of_data_points);
-        this.storage = new Storage!double(2);
+        this.storage = new Storage!double(config.number_of_data_points);
+        // this.storage = new Storage!double(2);
         this.api = new KuckApi();
     }
 
@@ -33,10 +33,10 @@ struct Manager
         double  price;
         Asset[] unique_assets;
 
+        writefln(MESSAGE, api.Name);
         _get_json();
-
         unique_assets = cast(Asset[])uniq(assets).array;
-        // foreach (ref asset; parallel(assets))
+
         foreach (ref asset; unique_assets)
         {
             price = api.ExtractPrice(json, asset.symbol);

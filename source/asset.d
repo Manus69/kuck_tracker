@@ -20,6 +20,7 @@ struct Asset
         this.raw_string = str;
         this.symbol = substrings[0];
         this.target = to!double(substrings[1]);
+        enforce(target != 0);
     }
 
     bool opEquals(in Asset rhs) const pure
