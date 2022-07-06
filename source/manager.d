@@ -6,6 +6,7 @@ import source.asset;
 import source.storage;
 import source.config;
 import source.kuck;
+import source.binance;
 
 struct Manager
 {
@@ -16,8 +17,10 @@ struct Manager
     this(in Config config)
     {
         this.storage = new Storage!double(config.number_of_data_points);
-        // this.storage = new Storage!double(2);
-        this.api = new KuckApi();
+        if (config.api == API_TYPE.KUCK)
+            this.api = new KuckApi();
+        else
+            this.api = new BinanceApi();
     }
 
     private void _get_json()
@@ -30,16 +33,18 @@ struct Manager
 
     void GetData(in Asset[] assets)
     {
-        double  price;
-        Asset[] unique_assets;
+        string[string]  table;
+        Asset[]         unique_assets;
+        double          price;
 
         writefln(MESSAGE, api.Name);
-        _get_json();
+        table = api.GetTable();
         unique_assets = cast(Asset[])uniq(assets).array;
 
         foreach (ref asset; unique_assets)
         {
-            price = api.ExtractPrice(json, asset.symbol);
+            // price = api.ExtractPrice(json, asset.symbol);
+            price = to!double(table[asset.symbol]);
             storage.Store(asset.symbol, price);
         }
     }

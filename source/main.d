@@ -8,6 +8,24 @@ import source.run;
 import source.startup;
 import source.output;
 
+string[string] StringToTable(in string str)
+{
+    string[] strings;
+    string[string] table;
+
+    strings = split(str[1 .. $], "},");
+
+    JSONValue value;
+
+    foreach (s; strings)
+    {
+        value = parseJSON(s ~ "}");
+        table[value["symbol"].str] = value["price"].str;
+    }
+    
+    return table;
+}
+
 void main(string[] args)
 {
     Config     config;

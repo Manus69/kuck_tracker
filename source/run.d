@@ -63,7 +63,7 @@ void Run(Config config, Asset[] assets)
 
         if (results.length > 0)
         {
-            // PlaySound(config.sound_file_name);
+            PlaySound(config.sound_file_name);
             Output(results);
         }
 

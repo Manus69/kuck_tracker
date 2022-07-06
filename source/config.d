@@ -2,17 +2,21 @@ module source.config;
 
 import source.defaults;
 
-enum R_INTERVAL : ulong {MIN = 5, MAX = 1000}
-enum T_INTERVAL : ulong {MIN = 60, MAX = 2_592_000}
+private enum R_INTERVAL : ulong {MIN = 5, MAX = 1000}
+private enum T_INTERVAL : ulong {MIN = 60, MAX = 2_592_000}
+enum API_TYPE {BIN = 1, KUCK}
+
+API_TYPE[string] APIS;
 
 class Config
 {
-    ulong   request_interval;
-    ulong   time_interval;
-    ulong   number_of_data_points;
-    string  input_file_name;
-    string  sound_file_name;
-    SysTime time_modified;
+    ulong       request_interval;
+    ulong       time_interval;
+    ulong       number_of_data_points;
+    string      input_file_name;
+    string      sound_file_name;
+    SysTime     time_modified;
+    API_TYPE    api;
 
     this()
     {
@@ -20,7 +24,17 @@ class Config
         this.time_interval = DEFAULT_T_INTERVAL;
         this.input_file_name = DEFAULT_FILE;
         this.sound_file_name = DEFAULT_S_FILE;
+        this.api = API_TYPE.BIN;
+        // this.api = API_TYPE.KUCK;
         this.time_modified = input_file_name.timeLastModified;
+    }
+
+    void SetApi(in string api)
+    {
+        if (api in APIS)
+            this.api = APIS[api];
+        else if (api)
+            throw new Exception(INPUT_ERROR);
     }
 
     void SetIntervals(ulong request, ulong time) pure
@@ -62,4 +76,9 @@ class Config
 
         return false;
     }
+}
+
+void ApiInit()
+{
+    APIS = ["binance" : API_TYPE.BIN, "kuck" : API_TYPE.KUCK];
 }

@@ -30,5 +30,5 @@ void KuckError(in string error_msg, in string msg)
 
 void TerminalError(in string error_msg, in string msg)
 {
-    stderr.writeln(error_msg, "\n", msg, " terminating");
+    stderr.writeln(error_msg, "\n", msg, ", terminating");
 }
