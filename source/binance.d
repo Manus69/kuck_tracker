@@ -44,6 +44,7 @@ class BinanceApi : Api
         string          response;
         JSONValue       json;
 
+        
         response = SendRequest();
         if (!response || response.length < 5)
             return null;

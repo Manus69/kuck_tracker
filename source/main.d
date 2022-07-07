@@ -38,6 +38,7 @@ void main(string[] args)
     }
     catch (Exception e)
     {
+        stderr.writeln(HELP_MESSAGE);
         return TerminalError(e.msg, STARTUP_FAILURE);
     }
 

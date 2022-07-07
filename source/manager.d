@@ -43,9 +43,15 @@ struct Manager
 
         foreach (ref asset; unique_assets)
         {
-            // price = api.ExtractPrice(json, asset.symbol);
-            price = to!double(table[asset.symbol]);
-            storage.Store(asset.symbol, price);
+            if (asset.symbol in table)
+            {
+                price = to!double(table[asset.symbol]);
+                storage.Store(asset.symbol, price);
+            }
+            else
+            {
+                throw new Exception(format("%s no such symbol in server response", asset.symbol));
+            }
         }
     }
 
