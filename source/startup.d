@@ -16,6 +16,8 @@ Config GetConfig(string[] cmd_args)
     config = new Config();
     getopt(cmd_args, R_INTERVAL_STR, &r_interval, API_STR, &api,
             T_INTERVAL_STR, &t_interval, FILE_STR, &config.input_file_name);
+    
+    config.SetTime();
     config.SetIntervals(r_interval, t_interval);
     config.SetApi(api);
     config.ComputeNDataPoints();

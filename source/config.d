@@ -26,6 +26,10 @@ class Config
         this.sound_file_name = DEFAULT_S_FILE;
         this.api = API_TYPE.BIN;
         // this.api = API_TYPE.KUCK;
+    }
+
+    void SetTime()
+    {
         this.time_modified = input_file_name.timeLastModified;
     }
 
